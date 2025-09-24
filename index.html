@@ -26,18 +26,18 @@
 
 <div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
 	<div class="text-center">
-	<h2>IntMeanFlow: </h2>
-      <h3>Few-step Speech Generation with Integral Velocity Distillation</h3>
+	<h2>SplitMeanFlow: </h2>
+      <h3>Interval Splitting Consistency in Few-step Speech Generation</h3>
       [<a href="#">Paper</a>]
 		<!-- [<a href="https://arxiv.org/abs/2303.03926">Paper</a>] -->
 		<!-- [<a href="https://arxiv.org/abs/2306.02982">Paper</a>] -->
 
         <p class="fst-italic mb-0">
         	<br>
-			Wei Wang, Rong Cao, Yi Guo,  Zhengyang Chen, Kuan Chen, Yuanyuan Huo, Yuping Wang, Yuxuan Wang
+			<!-- Wei Wang, Rong Cao, Yi Guo,  Zhengyang Chen, Kuan Chen, Yuanyuan Huo, Yuping Wang, Yuxuan Wang -->
       <p></p>
         </p>
-        <p><b>ByteDance</b></p>
+        <!-- <p><b>ByteDance</b></p> -->
 	</div>
 	<p><b>Abstract.</b> Flow-based generative models have greatly improved text-to-speech (TTS) synthesis quality, but inference speed remains limited by the iterative sampling process and multiple function evaluations (NFE). The recent MeanFlow model accelerates generation by modeling average velocity instead of instantaneous velocity. However, its direct application to TTS encounters challenges, including GPU memory overhead from Jacobian-vector products (JVP) and training instability due to self-bootstrap processes.
 To address these issues, we introduce IntMeanFlow, a framework for few-step speech generation with integral velocity distillation. By approximating average velocity with the teacher’s instantaneous velocity over a temporal interval, IntMeanFlow eliminates the need for JVPs and self-bootstrap, improving stability and reducing GPU memory usage. We also propose the Optimal Step Sampling Search (O3S) algorithm, which identifies the model-specific optimal sampling steps, improving speech synthesis without additional inference overhead. Experiments show that IntMeanFlow achieves 1-NFE inference for token-to-spectrogram and 3-NFE for text-to-spectrogram tasks while maintaining high-quality synthesis. </p>
