@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.88.1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href=""https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<title>IntMeanFlow</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+
+<body data-new-gr-c-s-check-loaded="14.1091.0" data-gr-ext-installed="">
+
+<div class="container" >
+<header role="banner">
+</header>
+<main role="main">
+<article itemscope itemtype="https://schema.org/BlogPosting">
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+	<div class="text-center">
+	<h2>IntMeanFlow: </h2>
+      <h3>Few-step Speech Generation with Integral Velocity Distillation</h3>
+      [<a href="#">Paper</a>]
+		<!-- [<a href="https://arxiv.org/abs/2303.03926">Paper</a>] -->
+		<!-- [<a href="https://arxiv.org/abs/2306.02982">Paper</a>] -->
+
+        <p class="fst-italic mb-0">
+        	<br>
+			Wei Wang, Rong Cao, Yi Guo,  Zhengyang Chen, Kuan Chen, Yuanyuan Huo, Yuping Wang, Yuxuan Wang
+      <p></p>
+        </p>
+        <p><b>ByteDance</b></p>
+	</div>
+	<p><b>Abstract.</b> Flow-based generative models have greatly improved text-to-speech (TTS) synthesis quality, but inference speed remains limited by the iterative sampling process and multiple function evaluations (NFE). The recent MeanFlow model accelerates generation by modeling average velocity instead of instantaneous velocity. However, its direct application to TTS encounters challenges, including GPU memory overhead from Jacobian-vector products (JVP) and training instability due to self-bootstrap processes.
+To address these issues, we introduce IntMeanFlow, a framework for few-step speech generation with integral velocity distillation. By approximating average velocity with the teacher’s instantaneous velocity over a temporal interval, IntMeanFlow eliminates the need for JVPs and self-bootstrap, improving stability and reducing GPU memory usage. We also propose the Optimal Step Sampling Search (O3S) algorithm, which identifies the model-specific optimal sampling steps, improving speech synthesis without additional inference overhead. Experiments show that IntMeanFlow achieves 1-NFE inference for token-to-spectrogram and 3-NFE for text-to-spectrogram tasks while maintaining high-quality synthesis. </p>
+
+	<p>
+	<b>Contents</b>
+      <ul>
+        <li><a href="#model-overview">Method Overview</a></li>
+        <li><a href="#F5TTS">IntMeanFlow x F5-TTS</a></li>
+        <li><a href="#CosyVoice2">IntMeanFlow x CosyVoice2</a></li>
+      </ul>
+	</p>
+
+	
+</div>
+
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">		
+	<h2 id="model-overview" style="text-align: center;">Method Overview</h2>
+	<body>
+	<p style="text-align: center;">
+		<img src="pics/overview.jpg" height="300" width="700">
+	</p>
+	</body>
+		<p style="text-align: center;" >
+			<b>Figure 1.</b> Conceptual Comparison of Flow Matching and IntMeanFlow
+		</p>
+</div>
+
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+	<h2 id="F5TTS" style="text-align: center;">IntMeanFlow x F5-TTS</h2>
+		<div class="table-responsive pt-3">
+			<table class="table table-hover pt-2">
+				<thead>
+				<tr>
+				<th style="vertical-align : middle;text-align: center">Language </th>
+				<th style="vertical-align : middle;text-align: center">Prompt </th>
+				<th style="vertical-align : middle;text-align: center">F5 Base (NFE=32)</th>
+				<th style="vertical-align : middle;text-align: center">F5 Base x IMF (NFE=3)</th>
+				<th style="vertical-align : middle;text-align: center">F5 Base x IMF (NFE=2)</th>
+				<th style="vertical-align : middle;text-align: center">F5 Small x IMF (NFE=3)</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;" rowspan="6">EN</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/prompt/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_nfe32/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe3/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/base_imf_nfe2/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/en/small_imf_nfe3/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;" rowspan="6">ZH</td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;" rowspan="6">N/A</td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/prompt/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_nfe32/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe3/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/f5tts/zh/base_imf_nfe2/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+</div>
+
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+	<h2 id="CosyVoice2" style="text-align: center;">IntMeanFlow x CosyVoice2</h2>
+		<div class="table-responsive pt-3">
+			<table class="table table-hover pt-2">
+				<thead>
+				<tr>
+				<th style="vertical-align : middle;text-align: center">Prompt </th>
+				<th style="vertical-align : middle;text-align: center">CosyVoice2 (NFE=32)</th>
+				<th style="vertical-align : middle;text-align: center">CosyVoice2 x IMF (NFE=1)</th>
+				<th style="vertical-align : middle;text-align: center">CosyVoice2 x MF (NFE=1)</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/1.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/2.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/3.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/4.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/5.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/prompt/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/nfe32/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/imf_nfe1/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+						<td style="vertical-align : middle;text-align:center;"><audio controls="controls" style="width: 190px;"><source src="audios/cosyvoice/en/mf_nfe1/6.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	<br>
+
+</div>
+
+
+
+</div>
+
+
+
+</article>
+</main>
+</div>
+
+</body>
+</html>
